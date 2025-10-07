@@ -2,4 +2,5 @@
 2025.10.2-10.5 Learning Unity & C#
 2025.10.6 GameManager AudioManager Scenes Player
 2025.10.7 Enemy FixBugs UIControls
-
+Until 2025.10.8 3:00, the following bugs remain unable to get fixed:
+1.stuckInWallArrow collision -- player & enemy
