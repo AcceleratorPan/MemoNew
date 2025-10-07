@@ -7,44 +7,61 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public Color buttonNormalColor = Color.white;
-    public Color buttonHighlightedColor = Color.yellow;
     public GameObject victoryPanel;
     public GameObject defeatPanel;
+    public GameObject pausePanel;
     public Text victoryScoreText;
     public Text defeatScoreText;
     public Text inGameScoreText;
+    public Text pauseScoreText;
     public Image pauseButtonImage;
+    public Sprite pauseNormalSprite;
+    public Sprite pauseHighlightedSprite;
+
     public Image musicMuteButtonImage;
+    public Sprite musicNormalSprite;
+    public Sprite musicMutedSprite;
+
     public Image sfxMuteButtonImage;
-    private bool isPaused = false;
+    public Sprite sfxNormalSprite;
+    public Sprite sfxMutedSprite;
+
     void Start()
     {
         victoryPanel.SetActive(false);
         defeatPanel.SetActive(false);
+        pausePanel.SetActive(false);
         UpdateInGameScore(0);
         UpdateMuteButtonUI();
     }
 
+    public void ShowPausePanel(int currentScore)
+    {
+        pauseScoreText.text = "Score: " + currentScore;
+        pausePanel.SetActive(true);
+    }
+
+    public void HidePausePanel()
+    {
+        pausePanel.SetActive(false);
+    }
+
     public void OnClick_TogglePause()
     {
-        isPaused = !isPaused;
-
-        if (isPaused)
+        if (GameManager.Instance.isGameOver)
         {
-            // 暂停游戏
-            Time.timeScale = 0f;
-            // 高亮按钮
-            pauseButtonImage.color = buttonHighlightedColor;
+            return;
         }
-        else
-        {
-            // 恢复游戏
-            Time.timeScale = 1f;
-            // 恢复按钮颜色
-            pauseButtonImage.color = buttonNormalColor;
-        }
+        pauseButtonImage.sprite = pauseHighlightedSprite;
+        GameManager.Instance.PauseGame();
     }
+
+    public void OnClick_ResumeButton()
+    {
+        pauseButtonImage.sprite = pauseNormalSprite;
+        GameManager.Instance.ResumeGame();
+    }
+
 
     public void OnClick_ToggleMusicMute()
     {
@@ -52,9 +69,6 @@ public class UIManager : MonoBehaviour
         UpdateMuteButtonUI();
     }
 
-    /// <summary>
-    /// 切换音效静音
-    /// </summary>
     public void OnClick_ToggleSfxMute()
     {
         AudioManager.Instance.ToggleSfx();
@@ -65,20 +79,20 @@ public class UIManager : MonoBehaviour
     {
         if (AudioManager.Instance.IsMusicMuted())
         {
-            musicMuteButtonImage.color = buttonHighlightedColor;
+            musicMuteButtonImage.sprite = musicMutedSprite;
         }
         else
         {
-            musicMuteButtonImage.color = buttonNormalColor;
+            musicMuteButtonImage.sprite = musicNormalSprite;
         }
 
         if (AudioManager.Instance.IsSfxMuted())
         {
-            sfxMuteButtonImage.color = buttonHighlightedColor;
+            sfxMuteButtonImage.sprite = sfxMutedSprite;
         }
         else
         {
-            sfxMuteButtonImage.color = buttonNormalColor;
+            sfxMuteButtonImage.sprite = sfxNormalSprite;
         }
     }
 

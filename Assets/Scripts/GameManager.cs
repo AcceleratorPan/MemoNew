@@ -7,14 +7,31 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public UIManager uiManager;
+    public bool IsPaused { get; private set; }
+    public bool isGameOver { get; private set; }
 
     private int enemyCount;
     private int score = 0;
-    private bool isGameOver = false;
+
+    public void PauseGame()
+    {
+        IsPaused = true;
+        Time.timeScale = 0f;
+        uiManager.ShowPausePanel(score);
+    }
+
+    public void ResumeGame()
+    {
+        IsPaused = false;
+        Time.timeScale = 1f;
+        uiManager.HidePausePanel();
+    }
 
     void Start()
     {
         Instance = this;
+        isGameOver = false;
+        IsPaused = false;
         SceneManager.LoadSceneAsync(2,LoadSceneMode.Additive);
     }
 

@@ -42,6 +42,10 @@ public class PlayerControl : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance != null && (GameManager.Instance.IsPaused || GameManager.Instance.isGameOver))
+        {
+            return;
+        }
         if (Hp <= 0)
         {
             ani.SetTrigger("Dead");

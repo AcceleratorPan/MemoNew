@@ -45,7 +45,7 @@ public class GreenControl : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.collider.gameObject.layer);
+        Debug.Log(collision.collider.name);
         if (collision.collider.tag == "wall")
         {
             Flip();

@@ -16,10 +16,23 @@ public class ArrowControl : MonoBehaviour
     public float endBlinkInterval = 0.05f;
     private SpriteRenderer arrowRenderer;
     private BoxCollider2D bc;
+    private BoxCollider2D bcTrigger;
     
     void Start()
     {
-        bc = GetComponent<BoxCollider2D>();
+        foreach (BoxCollider2D t in GetComponents<BoxCollider2D>())
+        {
+            if (t.isTrigger)
+            {
+                bcTrigger = t;
+            }
+            else
+            {
+                bc = t;
+            }
+        }
+        bc.enabled = false;
+        bcTrigger.enabled = true;
         arrowRenderer = GetComponent<SpriteRenderer>();
         gameObject.SetActive(false);
         Invoke("ArrowMove", 0.3f);
@@ -57,15 +70,13 @@ public class ArrowControl : MonoBehaviour
         else if (collision.tag == "wall")
         {
             AudioManager.Instance.PlaySound("1117");
-            inWall = true;
             gameObject.layer = 10;
+            inWall = true;
             timer = 0;
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             Destroy(GetComponent<Rigidbody2D>());
-            bc.isTrigger = false;
-            bc.usedByEffector = true;
-            PlatformEffector2D  effector = gameObject.AddComponent<PlatformEffector2D >();
-            effector.useOneWay = true;
-            effector.surfaceArc = 180f;
+            Destroy(bcTrigger);
+            bc.enabled = true;
             
             StartCoroutine(Blink());
         }
